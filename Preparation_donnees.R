@@ -55,13 +55,13 @@ paragraphs_with_parts <- paragraphs_df |>
 
 
 #### ANNOTATION MORPHOSYNTAXIQUE ---- 
-library(udpipe)
-
-# 1. Téléchargement du modèle de langue française (si non présent)
-ud_model_path <- "french-gsd-ud-2.5-191206.udpipe"
-if (!file.exists(ud_model_path)) {
-  udpipe_download_model(language = "french-gsd", model_dir = getwd())
-}
+# library(udpipe)
+# 
+# # 1. Téléchargement du modèle de langue française (si non présent)
+# ud_model_path <- "french-gsd-ud-2.5-191206.udpipe"
+# if (!file.exists(ud_model_path)) {
+#   udpipe_download_model(language = "french-gsd", model_dir = getwd())
+# }
 # 
 # # 2. Chargement du modèle
 # ud_model <- udpipe_load_model(file = ud_model_path)
@@ -78,9 +78,9 @@ if (!file.exists(ud_model_path)) {
 # # 5. Rajout de l'information 'partie' dans notre table d'annotations
 # # On extrait la partie depuis le doc_id (ex: "Partie_1_1" -> "Partie_1")
 # annotations_df <- annotations_df |>
-#   mutate(partie = str_extract(doc_id, "Partie_[1-3]"))
+#   mutate(partie = str_extract(doc_id, "Partie_[1-2]"))
 # 
-saveRDS(annotations_df, "donnees/annotations_df.RDS")
+# saveRDS(annotations_df, "donnees/annotations_df.RDS")
 
 annotations_df <- readRDS("donnees/annotations_df.RDS")
 
@@ -95,7 +95,7 @@ lemmes_interessants <- annotations_df |>
   filter(upos %in% pos_of_interest)
 
 nodes_table_auto <- lemmes_interessants |>
-  group_by(lemma) |>
+  group_by(lemma, partie) |>
   summarise(
     Total_Frequency = n(),
     POS_Category = names(which.max(table(upos)))
@@ -126,7 +126,7 @@ nodes_table <- nodes_table_auto |>
   filter(Total_Frequency > 15) |>
   rename(Id = lemma) |>
   mutate(Label = Id) |>
-  select(Id, Label, POS_Category, Total_Frequency) |>
+  select(Id, Label, POS_Category, Total_Frequency, partie) |>
   arrange(desc(Total_Frequency)) |> 
   # 6. Supprimer les mots trop communs (ex: "avoir", "dire")
   filter(!Label %in% lsa::stopwords_fr)
