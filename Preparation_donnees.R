@@ -187,4 +187,11 @@ write_csv(edges_table, "Resultats/Passeuse_3_4_edges.csv")
 
 cat("Les fichiers 'illusions-perdues-nodes.csv' et 'illusions-perdues-edges.csv' ont été créés dans le dossier 'Gephi_data/'.\n")
 
+write_csv(nodes_table[partie == "Partie_1"], "Resultats/Passeuse_nodes_3.csv")
+write_csv(nodes_table[partie == "Partie_2"], "Resultats/Passeuse_nodes_4.csv")
+
+write_csv(edges_table[edges_table$Partie == "Partie_1",], "Resultats/Passeuse_edges_3.csv")
+write_csv(edges_table[edges_table$Partie == "Partie_2",], "Resultats/Passeuse_edges_4.csv")
+
+
 
