@@ -13,6 +13,7 @@
 
 library(igraph)
 library(dplyr)
+library(tidyr)
 
 # ---- Paramètres ----
 nodes_file <- "Resultats/Passeuse_3_4_nodes.csv"
